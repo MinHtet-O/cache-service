@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "pb/";
+
+// The cache service definition.
+service Cache {
+  // Set cache value
+  rpc Set (CacheSetInput) returns (CacheSetResp) {}
+  // Get cache value with key
+  rpc Get (CacheGetInput) returns (CacheGetResp) {}
+}
+
+// CacheValue with key and data body
+message CacheSetInput {
+  string key = 1;
+  bytes value = 2;
+}
+
+message CacheSetResp {
+
+}
+
+message CacheGetInput {
+  string key = 1;
+}
+
+message CacheGetResp {
+ bytes value =1;
+}
