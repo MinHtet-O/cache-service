@@ -3,10 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/go-redis/redis"
 	"log"
 	"time"
-
-	"github.com/go-redis/redis"
 )
 
 type RedisClient struct {
