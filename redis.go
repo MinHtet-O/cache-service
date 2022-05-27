@@ -1,37 +1,62 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-redis/redis"
 )
 
-func RedisClient() {
+type RedisClient struct {
+	keyPrefix string
+	rdb       *redis.Client
+	ttl       time.Duration
+}
 
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB,
-	})
+var redisClient *RedisClient
 
-	err := rdb.Set("key", "value 123", 0).Err()
-	if err != nil {
-		panic(err)
+func NewRedisClient(keyPrefix string) *RedisClient {
+
+	if redisClient == nil {
+		fmt.Println("client already created")
+		rdb := redis.NewClient(&redis.Options{
+			Addr:     "localhost:6379",
+			Password: "", // no password set
+			DB:       0,  // use default DB,
+		})
+		redisClient = &RedisClient{
+			keyPrefix: "minhtet",
+			rdb:       rdb,
+			ttl:       time.Duration(300) * time.Second,
+		}
 	}
+	return redisClient
+}
 
-	val, err := rdb.Get("key").Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("key", val)
+func (c *RedisClient) Set(ctx context.Context, key string, value []byte) error {
+	key = fmt.Sprintf("%s:%s", c.keyPrefix, key)
+	err := c.rdb.WithContext(ctx).Set(key, value, c.ttl).Err()
+	return err
+}
 
-	val2, err := rdb.Get("key2").Result()
+func (c *RedisClient) Get(ctx context.Context, key string) ([]byte, error) {
+	key = fmt.Sprintf("%s:%s", c.keyPrefix, key)
+
+	val, err := c.rdb.WithContext(ctx).Get(key).Result()
+
+	return []byte(val), err
+}
+
+func main() {
+	c := NewRedisClient("minhtet")
+
+	ctx := context.Background()
+	c.Set(ctx, "studentID", []byte("123"))
+	val, err := c.Get(ctx, "studentName")
+
 	if err == redis.Nil {
-		fmt.Println("key2 does not exist")
-	} else if err != nil {
-		panic(err)
-	} else {
-		fmt.Println("key2", val2)
+		fmt.Println("key does not exist")
 	}
-
+	fmt.Println(string(val))
 }
