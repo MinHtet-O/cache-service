@@ -53,10 +53,11 @@ func main() {
 
 	ctx := context.Background()
 	c.Set(ctx, "studentID", []byte("123"))
-	val, err := c.Get(ctx, "studentName")
+	val, err := c.Get(ctx, "studentID")
 
 	if err == redis.Nil {
 		fmt.Println("key does not exist")
 	}
+
 	fmt.Println(string(val))
 }
