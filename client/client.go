@@ -2,45 +2,49 @@ package main
 
 import (
 	"cache-service/z_generated/pb"
-	"context"
 	"flag"
-	"fmt"
-	"log"
-	"time"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
 	addr    = flag.String("addr", "localhost:50051", "the address to connect rpc server")
 	timeout = flag.Int("timeout", 1, "timeout duration in second")
+
+	set = flag.Bool("set", false, "set raw cache")
+	get = flag.Bool("get", false, "get raw cache value")
+
+	setUser = flag.Bool("set-user", false, "set user cache")
+	getUser = flag.Bool("get-user", false, "get user cache value")
 )
 
 func main() {
 	flag.Parse()
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+	var c pb.CacheClient
+	conn := connectRPC(&c)
+	if *set {
+		key := flag.Args()[0]
+		val := flag.Args()[1]
+		setCache(c, key, val)
+		return
+	}
+	if *get {
+		key := flag.Args()[0]
+		getCache(c, key)
+		return
+	}
+	if *setUser {
+		name := flag.Args()[0]
+		class := flag.Args()[1]
+		roll := flag.Args()[2]
+		metadata := flag.Args()[3]
+		setUserCache(c, name, class, roll, metadata)
+		return
+	}
+	if *getUser {
+		name := flag.Args()[0]
+		class := flag.Args()[1]
+		roll := flag.Args()[2]
+		getUserCache(c, name, class, roll)
+		return
 	}
 	defer conn.Close()
-	// create a new rpc cache client
-	c := pb.NewCacheClient(conn)
-	// define context to set timeout
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
-	defer cancel()
-
-	// set cache value from rpc server
-	_, err = c.Set(ctx, &pb.CacheSetInput{Key: "sample-key", Value: []byte("sample value")})
-	if err != nil {
-		log.Fatalf("unable to set cache: %v", err)
-	}
-
-	// get cache value from rpc server
-	resp, err := c.Get(ctx, &pb.CacheGetInput{Key: "sample-key"})
-	if err != nil {
-		log.Fatalf("unable to get cache: %v", err)
-	}
-	fmt.Println(string(resp.GetValue()))
 }

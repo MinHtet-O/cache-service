@@ -8,6 +8,10 @@ service Cache {
   rpc Set (CacheSetInput) returns (CacheSetResp) {}
   // Get cache value with key
   rpc Get (CacheGetInput) returns (CacheGetResp) {}
+  // Set user cache value
+  rpc SetUser (User) returns (SetUserResp) {}
+  // Get user cache value with key
+  rpc GetUser (GetUserInput) returns (User) {}
 }
 
 // CacheValue with key and data body
@@ -26,4 +30,22 @@ message CacheGetInput {
 
 message CacheGetResp {
  bytes value =1;
+}
+
+// CacheValue with key and data body
+message User {
+  string name = 1;
+  string class = 2;
+  int64 rollnum=3;
+  bytes metadata=4;
+}
+
+message SetUserResp {
+
+}
+
+message GetUserInput {
+  string name = 1;
+  string class = 2;
+  int64 rollnum=3;
 }
