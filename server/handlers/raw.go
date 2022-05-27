@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"cache-service/z_generated/pb"
@@ -6,9 +6,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+
+	"google.golang.org/grpc"
 )
 
 var (
