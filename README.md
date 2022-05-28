@@ -12,19 +12,46 @@
 ### Console
 
 #### 1. Set Cache
-```    
-ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
-defer cancel()
-_, err := c.Set(ctx, &pb.CacheSetInput{Key: key, Value: []byte(value)})
+```    go
+var ctx = context.Background()
+_, err := c.Set(ctx, &pb.CacheSetInput{Key: "hello", Value: []byte("123")})
 if err != nil {
-		fmt.Println(err.Error())
-		return
+	panic(err)
 }
 ```
-
-	
 #### 2. Get Cache
+```    go
+var ctx = context.Background()
+resp, err := c.Get(ctx, &pb.CacheGetInput{Key: "hello"})
+if err != nil {
+	panic(err)
+}
+fmt.Println(resp)
+```
 #### 3. Set User Cache
+```    go
+_, err = c.SetUser(ctx, &pb.User{
+	Name:     "john",
+	Class:    "V,
+	Rollnum:  22,
+	Metadata: []byte("smart student"),
+})
+if err != nil {
+	panic(err)
+}
+```
 #### 4. Get User Cache
+```    go
+
+user, err := c.GetUser(ctx, &pb.GetUserInput{
+		Name:    name,
+		Class:   class,
+		Rollnum: rollInt,
+})
+if err != nil {
+	panic(err)
+}
+fmt.Println(user)
+```
 
 ### Programming Interface
