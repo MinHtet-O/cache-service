@@ -11,4 +11,20 @@
 ## Usage
 ### Console
 
+#### 1. Set Cache
+```
+    ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
+defer cancel()
+_, err := c.Set(ctx, &pb.CacheSetInput{Key: key, Value: []byte(value)})
+if err != nil {
+		fmt.Println(err.Error())
+		return
+}
+```
+
+	
+#### 2. Get Cache
+#### 3. Set User Cache
+#### 4. Get User Cache
+
 ### Programming Interface
