@@ -11,7 +11,7 @@
 ## Usage
 ### Programming interface
 
-#### 1. Set Cache
+###### 1. Set Cache
 ```    go
 var ctx = context.Background()
 _, err := c.Set(ctx, &pb.CacheSetInput{Key: "hello", Value: []byte("123")})
@@ -19,7 +19,7 @@ if err != nil {
 	panic(err)
 }
 ```
-#### 2. Get Cache
+###### 2. Get Cache
 ```    go
 var ctx = context.Background()
 resp, err := c.Get(ctx, &pb.CacheGetInput{Key: "hello"})
@@ -28,7 +28,7 @@ if err != nil {
 }
 fmt.Println(resp)
 ```
-#### 3. Set User Cache
+###### 3. Set User Cache
 ```    go
 _, err = c.SetUser(ctx, &pb.User{
 	Name:     "john",
@@ -40,7 +40,7 @@ if err != nil {
 	panic(err)
 }
 ```
-#### 4. Get User Cache
+###### 4. Get User Cache
 ```    go
 
 user, err := c.GetUser(ctx, &pb.GetUserInput{
@@ -57,14 +57,14 @@ fmt.Println(user)
 
 ### Console
 
-#### 1. Run server
+###### 1. Run server
 ```    ./build/rpcServer```
 
-#### 1. Set Cache
+###### 2. Set Cache
 ```    ./build/rpcClient -set your_key your_value```
-#### 2. Get Cache
+###### 3. Get Cache
 ```    ./build/rpcClient -get your_key```
-#### 3. Set User Cache
+###### 4. Set User Cache
 ```    ./build/rpcClient -set-user john V 22 "smart student"```
-#### 4. Get User Cache
+###### 5. Get User Cache
 ```    ./build/rpcClient -get-user john V 22```
