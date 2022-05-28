@@ -2,7 +2,6 @@ package data
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -28,7 +27,6 @@ func (m *CacheNotFound) Error() string {
 
 func NewRedisClient(keyPrefix string) *RedisClient {
 	if redisClient == nil {
-		log.Println("redis client already created")
 		rdb := redis.NewClient(&redis.Options{
 			Addr:     addr,
 			Password: passwd, // no password set

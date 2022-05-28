@@ -11,9 +11,7 @@ func (s *server) Set(ctx context.Context, in *pb.CacheSetInput) (*pb.CacheSetRes
 }
 
 func (s *server) Get(ctx context.Context, in *pb.CacheGetInput) (*pb.CacheGetResp, error) {
-
 	resp, err := s.cache.Get(ctx, in.GetKey())
-
 	if err != nil {
 		return nil, err
 	}
