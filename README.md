@@ -9,7 +9,7 @@
 6. build client <br> ```go build -o ./build/rpcClient ./client/*.go```
 
 ## Usage
-### Console
+### Programming interface
 
 #### 1. Set Cache
 ```    go
@@ -32,7 +32,7 @@ fmt.Println(resp)
 ```    go
 _, err = c.SetUser(ctx, &pb.User{
 	Name:     "john",
-	Class:    "V,
+	Class:    "V",
 	Rollnum:  22,
 	Metadata: []byte("smart student"),
 })
@@ -44,14 +44,27 @@ if err != nil {
 ```    go
 
 user, err := c.GetUser(ctx, &pb.GetUserInput{
-		Name:    name,
-		Class:   class,
-		Rollnum: rollInt,
+		Name:    "john",
+		Class:   "V",
+		Rollnum: 22,
 })
 if err != nil {
 	panic(err)
 }
+
 fmt.Println(user)
 ```
 
-### Programming Interface
+### Console
+
+#### 1. Run server
+```    ./build/rpcServer```
+
+#### 1. Set Cache
+```    ./build/rpcClient -set your_key your_value```
+#### 2. Get Cache
+```    ./build/rpcClient -get your_key```
+#### 3. Set User Cache
+```    ./build/rpcClient -set-user john V 22 "smart student"```
+#### 4. Get User Cache
+```    ./build/rpcClient -get-user john V 22```
